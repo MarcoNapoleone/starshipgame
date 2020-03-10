@@ -1,7 +1,50 @@
-#game-space {
-    background-color: cadetblue;
+* {
+    transition: all 0.5s cubic-bezier(0.42, 0, 0.21, 1.1)
 }
-#start{
-    background-color: coral;
-    box-shadow: aquamarine;
+
+#game-canvas {
+
+    background-color: cadetblue;
+    display: block;
+    position: relative;
+    width: 400px;
+    height: 500px;
+    border-radius: 10px;
+    border: 5px solid darkcyan;
+}
+
+#start-stop {
+
+    background-color: darkcyan;
+    /**width: 70px;*/
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 0;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#game-container {
+    width: 400px;
+    display: block;
+    position: relative;
+    margin: auto;
+}
+
+#start-stop.pause {
+    position: absolute;
+    top: 13px;
+    right: 5px;
+}
+
+#start-stop:not(.pause) {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%);
+}
+
+#start-stop:focus{
+    outline: 0;
 }

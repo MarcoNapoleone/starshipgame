@@ -1,11 +1,8 @@
-
 /*********************************** html imports **************************************/
 
-const canvas = document.getElementById("game-space");   //canvas setting
+const canvas = document.getElementById("game-canvas");   //canvas setting
 const context = canvas.getContext("2d");
-
-const startBut = document.getElementById("start");    //buttons to start and stop
-const stopBut = document.getElementById("stop");
+const gameButton = document.getElementById("start-stop");    //buttons to start and stop
 
 /*********************************** classes ***************************************/
 
@@ -56,13 +53,14 @@ class BigBang {                 //the object that mind all the asteroids generat
             const size = 5 + Math.random() * 25;
 
             /** adding a new random position asteroid to the swarm (leaving at least 5px from borders) */
-            this.swarm.push(new Asteroid(size + 5 + (Math.random() * (canvas.width - size - 5), -20, this.asteroidTravelSpeed, size)));
+            this.swarm.push(new Asteroid(size + 5 + Math.random() * (canvas.width - size * 2 - 5), -20, this.asteroidTravelSpeed, size));
             this.timeFromLastAsteroid -= this.spawnClock;
         }
         /** moving all the asteroids forward */
         for (const asteroid of this.swarm) {
             asteroid.act(delta);
         }
+        this.blackHole();
     }
 
     /** drawing all to the canvas */
@@ -91,24 +89,35 @@ class StarShip {
 
     render() {
         context.beginPath();
-        context.rect(mousePos.x - 10, canvas.height - 30, 20, 20);
+        context.rect(mousePos.x - 10, canvas.height - 25, 20, 20);
         context.fillStyle = "#ffffff";
         context.fill();
         context.closePath();
-        for(let bullet of this.bullets){
+        for (let bullet of this.bullets) {
             bullet.render();
         }
     }
 
+    act(delta) {
+        for (let bullet of this.bullets) {
+            bullet.act(delta);
+        }
+        this.deleteBullet()
+    }
+
     shoot() {
-        this.bullets.push(new bullet(mousePos.x, mousePos.y, this.reloadSpeed, 1));
-        for(let bullet of this.bullets){
-            bullet.act();
+        this.bullets.push(new Bullet(mousePos.x, mousePos.y, this.reloadSpeed, 1))
+    }
+
+    deleteBullet() {
+        for (let bullet in this.bullets) {
+            if (this.bullets[bullet].pos.y < 0)
+                this.bullets.splice(bullet, 1);
         }
     }
 }
 
-class bullet {
+class Bullet {
 
     speed = null;
     size = null;
@@ -150,33 +159,35 @@ let lastRender = Date.now();
 
 function renderField() {
 
-    if (gameStatus !== "inGame") {
-        setTimeout(renderField, 1000 / 120);
-        return;
-    }
     let now = Date.now();
     let delta = now - lastRender;
     lastRender = now;
 
+    if (gameStatus !== "inGame") {
+        window.requestAnimationFrame(renderField);
+        return;
+    }
+
     //console.log(1000 / delta); fps
     asteroidGenerator.explosion(delta);
-    asteroidGenerator.blackHole();
+    starship.act(delta);
     context.clearRect(0, 0, canvas.width, canvas.height);
     starship.render();
     asteroidGenerator.render();
-    setTimeout(renderField, 1000 / 120);
+    window.requestAnimationFrame(renderField);
 }
-setTimeout(renderField, 1000 / 120);
 
-/************************************************* interface interactions ********************************************************/
+//setTimeout(renderField, 1000 / 120);
+window.requestAnimationFrame(renderField);
+/******************************* interface interactions **************************************/
 
 /**
  * making the mouse input for the canvas
  */
 canvas.addEventListener("mousemove", (ev) => {
-        mousePos = {
-            x: ev.clientX, y: ev.clientY
-        };
+            mousePos = {
+                x: ev.clientX - canvas.getBoundingClientRect().left, y: ev.clientY
+        }
     }
 );
 
@@ -185,30 +196,32 @@ canvas.addEventListener("mousemove", (ev) => {
  */
 canvas.addEventListener("click", (ev) => {
         starship.shoot();
-        //console.log("click");
     }
 );
 
 /**
  * start button listener
  */
-startBut.addEventListener("click", (ev) => {
-        if (gameStatus === "ready") {
-            starship = new StarShip();
-            asteroidGenerator = new BigBang();
-            gameStatus = "inGame";
-        }
-    }
-);
+gameButton.addEventListener("click", (ev) => {
 
-/**
- * stop button listener
- */
-stopBut.addEventListener("click", (ev) => {
-        if (gameStatus === "inGame") {
-            gameStatus = "stop";
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            asteroidGenerator = null;
+        switch (gameStatus) {
+            case "ready":
+                starship = new StarShip();
+                asteroidGenerator = new BigBang();
+                gameStatus = "inGame";
+                gameButton.innerText = "pause";
+                gameButton.className = "pause";
+                break;
+            case "inGame":
+                gameStatus = "pause";
+                gameButton.innerText = "Resume";
+                gameButton.className = "resume";
+                break;
+            case "pause":
+                gameStatus = "inGame";
+                gameButton.innerText = "Pause";
+                gameButton.className = "pause";
+                break;
         }
     }
 );
