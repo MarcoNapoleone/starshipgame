@@ -34,30 +34,33 @@ function checkCollision(obj1, obj2) {
                     break;
 
                 case "rect":
-                    if ((obj1.pos.x >= obj2.pos.x - obj2.size / 2 && obj1.pos.x <= obj2.pos.x + obj2.size / 2) ||
+
+                    if ((obj1.pos.x >= obj2.pos.x - obj2.size / 2 && obj1.pos.x <= obj2.pos.x + obj2.size / 2) &&
                         (obj1.pos.y >= obj2.pos.y - obj2.size / 2 && obj1.pos.y <= obj2.pos.y + obj2.size / 2)) {
-                        if ((obj1.size + obj2.size / 2) <= (obj2.pos.x - obj1.pos.x) && (obj1.size + obj2.size / 2 <= (obj2.pos.y - obj1.pos.y))) {
+                        return true;
+                        //console.log(obj1.size, obj1.pos, obj2.size, obj2.pos);
+                        /**if (((obj1.size + obj2.size / 2) <= Math.abs(obj2.pos.x - obj1.pos.x)) && ((obj1.size + obj2.size / 2 <= Math.abs(obj2.pos.y - obj1.pos.y)))) {
                             return true;
-                        }
+                        } */
                     } else {
                         if (distance(obj1.pos, {
                             x: obj2.pos.x + obj2.size / 2,
-                            y: obj2.y + obj2.size / 2
+                            y: obj2.pos.y + obj2.size / 2
                         }) <= obj1.size) {
                             return true;
                         } else if (distance(obj1.pos, {
                             x: obj2.pos.x + obj2.size / 2,
-                            y: obj2.y - obj2.size / 2
+                            y: obj2.pos.y - obj2.size / 2
                         }) <= obj1.size) {
                             return true;
                         } else if (distance(obj1.pos, {
                             x: obj2.pos.x - obj2.size / 2,
-                            y: obj2.y + obj2.size / 2
+                            y: obj2.pos.y + obj2.size / 2
                         }) <= obj1.size) {
                             return true;
                         } else if (distance(obj1.pos, {
                             x: obj2.pos.x - obj2.size / 2,
-                            y: obj2.y - obj2.size / 2
+                            y: obj2.pos.y - obj2.size / 2
                         }) <= obj1.size) {
                             return true;
                         }
@@ -65,9 +68,9 @@ function checkCollision(obj1, obj2) {
                     break;
 
                 case "arrow":
-                    if (distance(obj1.pos, {x: obj2.pos.x, y: obj2.y + obj2.size / 2}) <= obj1.size) {
+                    if (distance(obj1.pos, {x: obj2.pos.x, y: obj2.pos.y + obj2.size / 2}) <= obj1.size) {
                         return true;
-                    } else if (distance(obj1.pos, {x: obj2.pos.x, y: obj2.y - obj2.size / 2}) <= obj1.size) {
+                    } else if (distance(obj1.pos, {x: obj2.pos.x, y: obj2.pos.y - obj2.size / 2}) <= obj1.size) {
                         return true;
                     }
                     break;

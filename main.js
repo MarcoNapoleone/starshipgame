@@ -32,9 +32,13 @@ function renderField() {
 
     for (let asteroid of asteroidGenerator.swarm) {
         for (let bullet of starShip.bullets) {
-            if (checkCollision(asteroid, bullet)){
-                asteroid.hp --;
+            if (checkCollision(asteroid, bullet)) {
+                asteroid.size -= 5;
+                bullet.hp--;
             }
+        }
+        if (checkCollision(asteroid, starShip)) {
+            console.log("crash");
         }
     }
     asteroidGenerator.act(delta);
@@ -52,9 +56,9 @@ window.requestAnimationFrame(renderField);
 /******************************* interface interactions **************************************/
 
 canvas.addEventListener("mousemove", (ev) => {
-        starShip.mouse = {
+        starShip.pos = {
             x: ev.clientX - canvas.getBoundingClientRect().left,
-            y: ev.clientY
+            y: canvas.height - 25,
         };
     }, {passive: true}
 );

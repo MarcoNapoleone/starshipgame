@@ -3,6 +3,7 @@ class Bullet {
     speed = null;
     size = null;
     shape = "arrow";
+    hp = 1;
 
     pos = {
         x: null, y: null

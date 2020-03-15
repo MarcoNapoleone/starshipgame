@@ -43,7 +43,7 @@ class BigBang {                 //the object that mind all the asteroids generat
      */
     blackHole() {
         for (let asteroid in this.swarm) {
-            if ((this.swarm[asteroid].pos.y >= this.gameSpace.height + this.swarm[asteroid].size + 1) || this.swarm[asteroid].hp < 1)
+            if ((this.swarm[asteroid].pos.y >= this.gameSpace.height + this.swarm[asteroid].size + 1) || this.swarm[asteroid].size < 5)
                 this.swarm.splice(asteroid, 1);
         }
         //console.log(this.swarm.length);   debugging test shows that the total number is constant

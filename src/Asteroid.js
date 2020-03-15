@@ -3,7 +3,6 @@ class Asteroid {
     speed = 150;
     size = null;
     shape = "circle";
-    hp = 1;
 
 
     pos = {
@@ -19,7 +18,7 @@ class Asteroid {
 
     render(context) {
         context.beginPath();
-        context.arc(this.pos.x, this.pos.y + 10, this.size, 0, 360);
+        context.arc(this.pos.x, this.pos.y, this.size, 0, 360);
         context.fillStyle = "#ffffff";
         context.fill();
         context.closePath();
