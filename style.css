@@ -2,40 +2,72 @@
     transition: all 0.5s cubic-bezier(0.42, 0, 0.21, 1.1)
 }
 
-#game-canvas {
-
-    background-color: cadetblue;
-    display: block;
+html {
+    height: 100vh; /* make sure it is at least as tall as the viewport */
+    width: 100vw;
     position: relative;
+}
+
+body {
+    height: 100vh; /* force the BODY element to match the height of the HTML element */
+}
+
+#game-container {
+
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    /**z-index: -1; /* Remove this line if it's not going to be a background! */
+}
+
+
+#game-canvas {
+    background-color: cadetblue;
+
+    position: absolute;
+
     width: 400px;
     height: 500px;
+
     border-radius: 10px;
     border: 5px solid darkcyan;
+
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    pointer-events: all;
+}
+#button-canvas-reference {
+
+    position: absolute;
+    width: 410px;
+    height: 510px;
+
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    pointer-events: none;
 }
 
 #start-stop {
-
     background-color: darkcyan;
-    /**width: 70px;*/
     padding: 2px 5px;
     border-radius: 3px;
     border: 0;
     color: white;
     text-align: center;
     text-transform: uppercase;
-}
-
-#game-container {
-    width: 400px;
-    display: block;
-    position: relative;
-    margin: auto;
+    pointer-events: all;
 }
 
 #start-stop.pause {
     position: absolute;
-    top: 13px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
 }
 
 #start-stop:not(.pause) {
@@ -45,6 +77,6 @@
     transform: translate(50%);
 }
 
-#start-stop:focus{
+#start-stop:focus {
     outline: 0;
 }
